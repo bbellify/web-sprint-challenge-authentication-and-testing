@@ -1,9 +1,14 @@
 const router = require('express').Router();
+const db = require('../../data/dbConfig')
 
 const { verifyRegister } = require('../middleware/auth-middleware')
 
-router.post('/register', verifyRegister, (req, res) => {
-  
+router.post('/register', verifyRegister, (req, res, next) => {
+  db('users').insert(req.body)
+    .then(user => {
+      console.log(user)
+    })
+    .catch(next)
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.

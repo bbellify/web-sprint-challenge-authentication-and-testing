@@ -14,6 +14,7 @@ function verifyRegister(req, res, next) {
                 next({ status: 400, message: 'username taken' })
             }
         })
+        .catch(next)
     }
 
     // if (!username || !password) {
