@@ -45,22 +45,57 @@ describe('auth router', () => {
         .send({ username: 'mister', password: 'sister' })
     })
     let res
-    beforeEach(async () => {
-      res = await request(server)
-        .post('/api/auth/login')
-        .send({ username: 'mister', password: 'sister' })
-    })
-    it('responds with 200 OK', async () => {
-      expect(res.status).toBe(200)
-    })
-    it('responds with welcome, username', async () => {
-      expect(res.body).toMatchObject({ message: 'welcome, mister' })
+    
+    describe('on successful login', () => {
+      
+      beforeEach(async () => {
+        res = await request(server)
+          .post('/api/auth/login')
+          .send({ username: 'mister', password: 'sister' })
+      })
+
+      it('responds with 200 OK', async () => {
+        expect(res.status).toBe(200)
+      })
+      it('responds with welcome, username', async () => {
+        expect(res.body).toMatchObject({ message: 'welcome, mister' })
+      })
+      it('responds with token', async () => {
+        expect(res.body.token).toBeTruthy()
+      })
+
+    describe('on failed login', () => {
+      it('responds with invalid credentials', async () => {
+        res = await request(server)
+          .post('/api/auth/login')
+          .send({ username: 'mister', password: 'brother' })
+        expect(res.body).toMatchObject({ message: 'invalid credentials' })
+        })
+      })
     })
   })
-
+    
 })
 
 
-describe('login endpoint', () => {
+describe('jokes endpoint', () => {
+  it('responds with token required when no token present', async () => {
+    let res = await request(server)
+      .get('/api/jokes')
+    expect(res.body).toMatchObject({ message: 'token required' })
+  })
+  it('responds with jokes array when token is present', async () => {
+    let res = await request(server)
+      .post('/api/auth/login')
+      .send({ username: 'mister', password: 'sister' })
 
+
+    let result = await request(server)
+      .get('/api/jokes')
+      .set({ authorization: res.body.token })
+
+    expect(result.body).toHaveLength(3)
+    expect(result.body[0]).toMatchObject({ id: '0189hNRf2g' })
+  })
 })
+
