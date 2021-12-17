@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const { JWT_SECRET } = require('../secrets')
 
 function tokenBuilder(user) {
     const payload = {
@@ -8,7 +9,7 @@ function tokenBuilder(user) {
     const options = {
         expiresIn: '8h'
     }
-    const result = jwt.sign(payload, 'supersecretsecret', options)
+    const result = jwt.sign(payload, JWT_SECRET, options)
     return result
 }
 

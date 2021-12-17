@@ -2,7 +2,7 @@ const bcryptjs = require('bcryptjs');
 const bcrypt = require('bcryptjs')
 const router = require('express').Router();
 
-const db = require('../../data/dbConfig')
+const User = require('../users/users-model')
 
 const { 
   validatePayload,
@@ -18,11 +18,9 @@ router.post('/register', validatePayload, validateRegister, (req, res, next) => 
   const hash = bcrypt.hashSync(user.password, 8)
 
   user.password = hash
-
-  // transport some of this into model?
-  db('users').insert(user)
-    .then(async ([newId]) => {
-      const newUser = await db('users').where('id', newId).first()
+  
+  User.insert(user)
+    .then(newUser => {
       res.status(201).json(newUser)
     })
     .catch(next)
@@ -53,10 +51,10 @@ router.post('/register', validatePayload, validateRegister, (req, res, next) => 
   */
 });
 
-router.post('/login', validatePayload, validateLogin, (req, res, next) => {
+router.post('/login', validatePayload, validateLogin, async (req, res, next) => {
   let { username, password } = req.body
 
-  db('users').where('username', username).first()
+  User.findByUsername(username)
     .then(user => {
       if (bcryptjs.compareSync(password, user.password)) {
         const token = tokenBuilder(user)

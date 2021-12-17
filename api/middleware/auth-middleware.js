@@ -1,20 +1,19 @@
-const db = require('../../data/dbConfig')
+const User = require('../users/users-model')
 
 function validateRegister(req, res, next) {
-    
-    db('users').where('username', req.body.username).first()
-    .then(user => {
-        if (!user) {
-            next()
-        } else {
-            next({ status: 400, message: 'username taken' })
-        }
-    })
-    .catch(next)
+    User.findByUsername(req.body.username)
+        .then(user => {
+            if (!user) {
+                next()
+            } else {
+                next({ status: 400, message: 'username taken' })
+            }
+        })
+        .catch(next)
 }
 
 function validateLogin(req, res, next) {
-    db('users').where('username', req.body.username).first()
+    User.findByUsername(req.body.username)
         .then(user => {
             if (!user) {
                 next({ status: 401, message: 'invalid credentials' })
