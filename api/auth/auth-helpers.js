@@ -12,7 +12,6 @@ function tokenBuilder(user) {
     return result
 }
 
-
 module.exports = {
     tokenBuilder
 }
