@@ -54,6 +54,20 @@ Your finished project must include all of the following requirements (further in
 Be prepared to demonstrate your understanding of this week's concepts by answering questions on the following topics.
 
 1. Differences between using _sessions_ or _JSON Web Tokens_ for authentication.
+
+    Sessions is a stateful authentication strategy where the server side tracks authorized sessions and communicates this, along with other data potentially, to the client via cookies. 
+
+    A token-based authentication strategy is stateless, where a client passes a token to the server in order to prove their identity in order to access restricted paths/data. 
+
 2. What does `bcryptjs` do to help us store passwords in a secure manner?
+
+    `bcryptjs` hashes passwords submitted by the client so the server doesn't save passwords as plain text. This keeps the server from seeing the password in plain text, helping to protect the client from server hacks.
+
 3. How are unit tests different from integration and end-to-end testing?
+
+    Unit tests are distinct from both integration and end-to-end testing in that unit tests are designed to test the functionality of small units of code (components, functions) in isolation. In contrast, integration or end-to-end testing tests how different parts of the application interact with each other.
+
 4. How does _Test Driven Development_ change the way we write applications and tests?
+
+    Test driven development means you write tests describing the functionality that you want your application to deliver, and then you go write the code to make it pass these tests. This not only helps assure the code is delivering desirable behavior throughout development, but also can contribute to writing very precise and clean code, as well-written tests will immediately begin to signal which edge-cases are throwing bugs. 
+    `Write tests -> make them pass -> refactor ` is a basic workflow for test driven development. 
